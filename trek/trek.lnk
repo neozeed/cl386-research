@@ -1,0 +1,14 @@
+abandon attack autover capture cgetc checkcond +
+check_out compkl computer damage damaged dcrept +
+destruct dock dumpgame dumpme dumpssradio events +
+externs getcodi getpar help impulse initquad +
+kill klmove lose lrscan main move +
+nova out phaser play ram ranf nullsleep +
+rest schedule score setup setwarp shield +
+snova srscan systemname torped utility visual +
+warp win
+trek2 /NOE /NOI /NOD:OLDNAMES
+nul.map
+..\..\lib2\libc.lib +
+..\..\lib2\os2386.lib
+nul.def;

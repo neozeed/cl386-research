@@ -1,0 +1,6 @@
+dhry21a.obj dhry21b.obj timers.obj
+dhry2_ /NOIG
+nul.map
+..\..\lib2\libc.lib +
+..\..\lib2\os2386.lib
+nul.def;

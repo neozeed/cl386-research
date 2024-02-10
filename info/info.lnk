@@ -1,0 +1,7 @@
+file funcs infocom init input interp io  jump object options page print property +
+support term variable
+info2 /NOIG /NOD:OLDNAMES
+nul.map
+..\..\lib2\libc.lib +
+..\..\lib2\os2386.lib
+nul.def;

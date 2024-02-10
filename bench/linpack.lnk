@@ -1,0 +1,6 @@
+linpack
+linpack2 /NOIG
+nul.map
+..\..\lib2\libc.lib +
+..\..\lib2\os2386.lib
+nul.def;

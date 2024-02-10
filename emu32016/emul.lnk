@@ -1,0 +1,6 @@
+32016 decode emul32k mem32016 allshr alldiv allrem allshl allmul
+emul2 /NOIG /NOD:OLDNAMES /NOD:LIBCRT
+nul.map
+..\..\lib2\libc.lib +
+..\..\lib2\os2386.lib
+nul.def;

@@ -1,0 +1,13 @@
+SYS os2v2
+NAME trek2w
+FILE abandon.obj,attack.obj,autover.obj,capture.obj,cgetc.obj,checkcond.obj
+FILE check_out.obj,compkl.obj,computer.obj,damage.obj,damaged.obj,dcrept.obj
+FILE destruct.obj,dock.obj,dumpgame.obj,dumpme.obj,dumpssradio.obj,events.obj
+FILE externs.obj,getcodi.obj,getpar.obj,help.obj,impulse.obj,initquad.obj
+FILE kill.obj,klmove.obj,lose.obj,lrscan.obj,main.OBJ,move.obj
+FILE nova.obj,nullsleep.obj,out.obj,phaser.obj,play.obj,ram.obj
+FILE ranf.obj,rest.obj,schedule.obj,score.obj,setup.obj,setwarp.obj
+FILE shield.obj,snova.obj,srscan.obj,systemname.obj,torped.obj,utility.obj
+FILE visual.obj,warp.obj,win.obj
+LIBR ..\..\lib2\LIBC.LIB
+LIBR ..\..\lib2\OS2386.LIB

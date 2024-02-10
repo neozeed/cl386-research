@@ -1,0 +1,10 @@
+app.obj append.obj as.obj atof-generic.obj atof-ieee.obj bignum-copy.obj +
+error.obj expr.obj flonum-const.obj flonum-copy.obj flonum-mult.obj frags.obj +
+hash.obj hex-value.obj i386.obj input-file.obj input-scrub.obj messages.obj +
+obstack.obj omfwrite.obj output-file.obj read.obj subsegs.obj symbols.obj +
+version.obj write.obj xenixomf.obj xmalloc.obj xrealloc.obj
+ax386 /NOE /NOI /NOD:OLDNAMES
+nul.map
+..\..\lib2\libc.lib +
+..\..\lib2\os2386.lib
+nul.def;

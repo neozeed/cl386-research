@@ -1,0 +1,11 @@
+msdos286 run286 C:\cl386-research\bin\nt-dec\cl386 /u /w /I. /I.. /G3 -DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX  /c omflibam.c
+msdos286 run286 C:\cl386-research\bin\nt-dec\cl386 /u /w /I. /I.. /G3 -DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX  /c omflibap.c
+msdos286 run286 C:\cl386-research\bin\nt-dec\cl386 /u /w /I. /I.. /G3 -DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX  /c omflibcl.c
+msdos286 run286 C:\cl386-research\bin\nt-dec\cl386 /u /w /I. /I.. /G3 -DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX  /c omflibcp.c
+msdos286 run286 C:\cl386-research\bin\nt-dec\cl386 /u /w /I. /I.. /G3 -DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX  /c omflibcr.c
+msdos286 run286 C:\cl386-research\bin\nt-dec\cl386 /u /w /I. /I.. /G3 -DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX  /c omflibdl.c
+msdos286 run286 C:\cl386-research\bin\nt-dec\cl386 /u /w /I. /I.. /G3 -DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX  /c omflibex.c
+msdos286 run286 C:\cl386-research\bin\nt-dec\cl386 /u /w /I. /I.. /G3 -DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX  /c omflibpb.c
+msdos286 run286 C:\cl386-research\bin\nt-dec\cl386 /u /w /I. /I.. /G3 -DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX  /c omflibrd.c
+msdos286 run286 C:\cl386-research\bin\nt-dec\cl386 /u /w /I. /I.. /G3 -DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX  /c omflibut.c
+msdos286 run286 C:\cl386-research\bin\nt-dec\cl386 /u /w /I. /I.. /G3 -DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX  /c omflibwr.c

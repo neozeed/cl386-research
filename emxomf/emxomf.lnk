@@ -1,0 +1,9 @@
+cplus-dem.obj emxomf-32.obj stabshll-32.obj getopt.obj getopt1.obj grow.obj +
+omflib\omflibam.obj omflib\omflibap.obj omflib\omflibcl.obj omflib\omflibcp.obj +
+omflib\omflibcr.obj omflib\omflibdl.obj omflib\omflibex.obj omflib\omflibpb.obj +
+omflib\omflibrd.obj omflib\omflibut.obj omflib\omflibwr.obj
+emxomf /NOE /NOI /NOD:OLDNAMES
+nul.map
+..\..\lib2\libc.lib +
+..\..\lib2\os2386.lib
+nul.def;
