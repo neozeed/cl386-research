@@ -1,0 +1,6 @@
+gcc.obj obstack.obj version.obj mktemp.obj
+xgcc /NOIG /NOE
+nul.map
+..\..\lib2\libc.lib +
+..\..\lib2\os2386.lib
+nul.def;
