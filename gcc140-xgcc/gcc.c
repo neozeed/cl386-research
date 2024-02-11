@@ -59,6 +59,9 @@ or with constant text in a single argument.
  %w	marks the argument containing or following the %w as the
 	"output file" of this compilation.  This puts the argument
 	into the sequence of arguments that %o will substitute later.
+ %W{...}
+	like %{...} but mark last argument supplied within
+	as a file to be deleted on failure.
  %o	substitutes the names of all the output files, with spaces
 	automatically placed around them.  You should write spaces
 	around the %o as well or the results are undefined.
@@ -80,6 +83,7 @@ or with constant text in a single argument.
  %l     process LINK_SPEC as a spec.
  %L     process LIB_SPEC as a spec.
  %S     process STARTFILE_SPEC as a spec.  A capital S is actually used here.
+ %E     process ENDFILE_SPEC as a spec.  A capital E is actually used here.
  %c	process SIGNED_CHAR_SPEC as a spec.
  %C     process CPP_SPEC as a spec.  A capital C is actually used here.
  %1	process CC1_SPEC as a spec.
@@ -119,32 +123,40 @@ position among the other output files.
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <io.h>
+#include <process.h>
 #include <sys/types.h>
 //#include <signal.h>
-//#include <sys/file.h>
+#define __TURBOC__
+#ifdef __TURBOC__
 #include <process.h>
-
-#include "config.h"
-#include "obstack.h"
-#include "gvarargs.h"
-
-/*
-#define unlink _unlink
-#define access _access
-#define spawnv _spawnv
-#define spawnvp _spawnvp
-*/
-#define alloca malloc
-
-
-CPP_PREDEFINES="-Di386 -DOS2 -D_M_IX86 -D_X86";
-
-#ifdef USG
+#include <errno.h>
 #define R_OK 4
 #define W_OK 2
 #define X_OK 1
-//#define vfork fork
+#endif
+#define bcopy(a,b,c) memcpy (b,a,c)
+#define bzero(a,b) memset (a,0,b)
+#define bcmp(a,b,c) memcmp (a,b,c)
+
+#define CPP_PREDEFINES "-DOS2 -Di386"
+
+
+#include "config.h"
+#include "obstack.h"
+#ifdef __TURBOC__
+#include <stdarg.h>
+#else
+#include "gvarargs.h"
+#endif
+
+#ifdef USG
+#ifndef R_OK
+#define R_OK 4
+#define W_OK 2
+#define X_OK 1
+#endif
+
+#define vfork fork
 #endif /* USG */
 
 #define obstack_chunk_alloc xmalloc
@@ -171,9 +183,6 @@ static char *find_exec_file ();
 void validate_switches ();
 void validate_all_switches ();
 void fancy_abort ();
-#ifdef M_XENIX
-char *find_lib ();
-#endif /* M_XENIX */
 
 /* config.h can define ASM_SPEC to provide extra args to the assembler
    or extra switch-translations.  */
@@ -204,6 +213,11 @@ char *find_lib ();
 #define LIB_SPEC "%{!p:%{!pg:-lc}}%{p:-lc_p}%{pg:-lc_p}"
 #endif
 
+/* config.h can define ENDFILE_SPEC to override the default crtn files.  */
+#ifndef ENDFILE_SPEC
+#define ENDFILE_SPEC ""
+#endif
+
 /* config.h can define STARTFILE_SPEC to override the default crt0 files.  */
 #ifndef STARTFILE_SPEC
 #define STARTFILE_SPEC  \
@@ -216,17 +230,6 @@ char *find_lib ();
    : "%{!fsigned-char:-D__CHAR_UNSIGNED__}")
 
 /* This defines which switch letters take arguments.  */
-
-#ifdef M_XENIX
-#ifndef SWITCH_TAKES_ARG
-#define SWITCH_TAKES_ARG(CHAR)      \
-  ((CHAR) == 'D' || (CHAR) == 'U' || (CHAR) == 'o' \
-   || (CHAR) == 'e' || (CHAR) == 'T' || (CHAR) == 'u' \
-   || (CHAR) == 'I' || (CHAR) == 'Y' || (CHAR) == 'm' \
-   || (CHAR) == 'L' || (CHAR) == 'i' || (CHAR) == 'A' \
-   || (CHAR) == 'F')
-#endif
-#endif
 
 #ifndef SWITCH_TAKES_ARG
 #define SWITCH_TAKES_ARG(CHAR)      \
@@ -256,215 +259,68 @@ struct compiler
    A file that does not end in any of these suffixes will be passed
    unchanged to the loader and nothing else will be done to it.  */
 
-#ifdef M_XENIX
-#ifndef __GNUC__
-/* Microsoft C 5.1 (Beta) and earlier (and probaly latter!) do not
- * grok very long strings.  So here is the .c compilation spec
- * string in a form it does grok!  The only difference between this
- * and the standard one is 'as' is replaced with 'gas' and %{gg:...}
- * with %{g}.
- */
-static char c_string[] = {
-	0x63,0x70,0x70,0x20,0x25,0x7b,0x6e,0x6f,0x73,0x74,
-	0x64,0x69,0x6e,0x63,0x7d,0x20,0x25,0x7b,0x43,0x7d,
-	0x20,0x25,0x7b,0x76,0x7d,0x20,0x25,0x7b,0x44,0x2a,
-	0x7d,0x20,0x25,0x7b,0x55,0x2a,0x7d,0x20,0x25,0x7b,
-	0x49,0x2a,0x7d,0x20,0x25,0x7b,0x4d,0x2a,0x7d,0x20,
-	0x25,0x7b,0x69,0x2a,0x7d,0x20,0x25,0x7b,0x74,0x72,
-	0x69,0x67,0x72,0x61,0x70,0x68,0x73,0x7d,0x20,0x2d,
-	0x75,0x6e,0x64,0x65,0x66,0x20,0x20,0x20,0x20,0x20,
-	0x20,0x20,0x20,0x20,0x2d,0x44,0x5f,0x5f,0x47,0x4e,
-	0x55,0x43,0x5f,0x5f,0x20,0x25,0x7b,0x61,0x6e,0x73,
-	0x69,0x3a,0x2d,0x74,0x72,0x69,0x67,0x72,0x61,0x70,
-	0x68,0x73,0x20,0x2d,0x24,0x20,0x2d,0x44,0x5f,0x5f,
-	0x53,0x54,0x52,0x49,0x43,0x54,0x5f,0x41,0x4e,0x53,
-	0x49,0x5f,0x5f,0x7d,0x20,0x25,0x7b,0x21,0x61,0x6e,
-	0x73,0x69,0x3a,0x25,0x70,0x7d,0x20,0x25,0x50,0x20,
-	0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x25,0x63,0x20,
-	0x25,0x7b,0x4f,0x3a,0x2d,0x44,0x5f,0x5f,0x4f,0x50,
-	0x54,0x49,0x4d,0x49,0x5a,0x45,0x5f,0x5f,0x7d,0x20,
-	0x25,0x7b,0x74,0x72,0x61,0x64,0x69,0x74,0x69,0x6f,
-	0x6e,0x61,0x6c,0x7d,0x20,0x25,0x7b,0x70,0x65,0x64,
-	0x61,0x6e,0x74,0x69,0x63,0x7d,0x9,0x25,0x7b,0x57,
-	0x63,0x6f,0x6d,0x6d,0x65,0x6e,0x74,0x2a,0x7d,0x20,
-	0x25,0x7b,0x57,0x74,0x72,0x69,0x67,0x72,0x61,0x70,
-	0x68,0x73,0x7d,0x20,0x25,0x7b,0x57,0x61,0x6c,0x6c,
-	0x7d,0x20,0x25,0x43,0x20,0x20,0x20,0x20,0x20,0x20,
-	0x20,0x20,0x25,0x69,0x20,0x25,0x7b,0x21,0x4d,0x2a,
-	0x3a,0x25,0x7b,0x21,0x45,0x3a,0x25,0x7b,0x21,0x70,
-	0x69,0x70,0x65,0x3a,0x25,0x67,0x2e,0x63,0x70,0x70,
-	0x7d,0x7d,0x7d,0x25,0x7b,0x45,0x3a,0x25,0x7b,0x6f,
-	0x2a,0x7d,0x7d,0x25,0x7b,0x4d,0x2a,0x3a,0x25,0x7b,
-	0x6f,0x2a,0x7d,0x7d,0x20,0x7c,0xa,0x20,0x20,0x20,
-	0x20,0x25,0x7b,0x21,0x4d,0x2a,0x3a,0x25,0x7b,0x21,
-	0x45,0x3a,0x63,0x63,0x31,0x20,0x25,0x7b,0x21,0x70,
-	0x69,0x70,0x65,0x3a,0x25,0x67,0x2e,0x63,0x70,0x70,
-	0x7d,0x20,0x25,0x31,0x20,0x9,0x9,0x20,0x20,0x20,
-	0x25,0x7b,0x21,0x51,0x3a,0x2d,0x71,0x75,0x69,0x65,
-	0x74,0x7d,0x20,0x2d,0x64,0x75,0x6d,0x70,0x62,0x61,
-	0x73,0x65,0x20,0x25,0x69,0x20,0x25,0x7b,0x59,0x2a,
-	0x7d,0x20,0x25,0x7b,0x64,0x2a,0x7d,0x20,0x25,0x7b,
-	0x6d,0x2a,0x7d,0x20,0x25,0x7b,0x66,0x2a,0x7d,0x20,
-	0x25,0x7b,0x61,0x7d,0x9,0x9,0x20,0x20,0x20,0x25,
-	0x7b,0x67,0x7d,0x20,0x25,0x7b,0x4f,0x7d,0x20,0x25,
-	0x7b,0x57,0x2a,0x7d,0x20,0x25,0x7b,0x77,0x7d,0x20,
-	0x25,0x7b,0x70,0x65,0x64,0x61,0x6e,0x74,0x69,0x63,
-	0x7d,0x20,0x25,0x7b,0x61,0x6e,0x73,0x69,0x7d,0x20,
-	0x25,0x7b,0x74,0x72,0x61,0x64,0x69,0x74,0x69,0x6f,
-	0x6e,0x61,0x6c,0x7d,0x9,0x9,0x20,0x20,0x20,0x25,
-	0x7b,0x76,0x3a,0x2d,0x76,0x65,0x72,0x73,0x69,0x6f,
-	0x6e,0x7d,0x20,0x25,0x7b,0x67,0x67,0x3a,0x2d,0x73,
-	0x79,0x6d,0x6f,0x75,0x74,0x20,0x25,0x67,0x2e,0x73,
-	0x79,0x6d,0x7d,0x20,0x25,0x7b,0x70,0x67,0x3a,0x2d,
-	0x70,0x7d,0x20,0x25,0x7b,0x70,0x7d,0x9,0x9,0x20,
-	0x20,0x20,0x25,0x7b,0x70,0x67,0x3a,0x25,0x7b,0x66,
-	0x6f,0x6d,0x69,0x74,0x2d,0x66,0x72,0x61,0x6d,0x65,
-	0x2d,0x70,0x6f,0x69,0x6e,0x74,0x65,0x72,0x3a,0x25,
-	0x65,0x2d,0x70,0x67,0x20,0x61,0x6e,0x64,0x20,0x2d,
-	0x66,0x6f,0x6d,0x69,0x74,0x2d,0x66,0x72,0x61,0x6d,
-	0x65,0x2d,0x70,0x6f,0x69,0x6e,0x74,0x65,0x72,0x20,
-	0x61,0x72,0x65,0x20,0x69,0x6e,0x63,0x6f,0x6d,0x70,
-	0x61,0x74,0x69,0x62,0x6c,0x65,0x7d,0x7d,0x9,0x9,
-	0x20,0x20,0x20,0x25,0x7b,0x53,0x3a,0x25,0x7b,0x6f,
-	0x2a,0x7d,0x25,0x7b,0x21,0x6f,0x2a,0x3a,0x2d,0x6f,
-	0x20,0x25,0x62,0x2e,0x73,0x7d,0x7d,0x25,0x7b,0x21,
-	0x53,0x3a,0x2d,0x6f,0x20,0x25,0x7b,0x7c,0x21,0x70,
-	0x69,0x70,0x65,0x3a,0x25,0x67,0x2e,0x73,0x7d,0x7d,
-	0x20,0x7c,0xa,0x20,0x20,0x20,0x20,0x20,0x20,0x20,
-	0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x25,0x7b,0x21,
-	0x53,0x3a,0x67,0x61,0x73,0x20,0x25,0x7b,0x52,0x7d,
-	0x20,0x25,0x7b,0x6a,0x7d,0x20,0x25,0x7b,0x4a,0x7d,
-	0x20,0x25,0x7b,0x68,0x7d,0x20,0x25,0x7b,0x64,0x32,
-	0x7d,0x20,0x25,0x61,0x20,0x25,0x7b,0x67,0x7d,0x9,
-	0x9,0x20,0x20,0x20,0x20,0x20,0x20,0x25,0x7b,0x63,
-	0x3a,0x25,0x7b,0x6f,0x2a,0x7d,0x25,0x7b,0x21,0x6f,
-	0x2a,0x3a,0x2d,0x6f,0x20,0x25,0x77,0x25,0x62,0x2e,
-	0x6f,0x7d,0x7d,0x25,0x7b,0x21,0x63,0x3a,0x2d,0x6f,
-	0x20,0x25,0x64,0x25,0x77,0x25,0x62,0x2e,0x6f,0x7d,
-	0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,
-	0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,
-	0x20,0x20,0x25,0x7b,0x21,0x70,0x69,0x70,0x65,0x3a,
-	0x25,0x67,0x2e,0x73,0x7d,0xa,0x20,0x7d,0x7d,0x7d,
-	0x0
-};
-#endif /* __GNUC__ */
-#endif /* M_XENIX */
-
 struct compiler compilers[] =
 {
   {".c",
-#ifndef M_XENIX
-   "cpp %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{i*} %{trigraphs} -undef \
-        -D__GNUC__ %{ansi:-trigraphs -$ -D__STRICT_ANSI__} %{!ansi:%p} %P\
-        %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic}\
-	%{Wcomment*} %{Wtrigraphs} %{Wall} %C\
-        %i %{!M*:%{!E:%{!pipe:%g.cpp}}}%{E:%{o*}}%{M*:%{o*}} |\n\
-    %{!M*:%{!E:cc1 %{!pipe:%g.cpp} %1 \
+   "cpp_v139 %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{i*} %{trigraphs} -undef \
+        -D__GNUC__ -DGNUDOS %{ansi:-trigraphs -$ -D__STRICT_ANSI__} %{!ansi:%p} %P\
+        %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic} %{P}\
+	%{Wcomment*} %{Wtrigraphs} %{Wall} %{w} %C\
+        %i %{!M*:%{!E:%{!pipe:%g.cpp}}}%{E:%W{o*}}%{M*:%W{o*}} |\n\
+    %{!M*:%{!E:cc1_v139 %{!pipe:%g.cpp} %1 \
 		   %{!Q:-quiet} -dumpbase %i %{Y*} %{d*} %{m*} %{f*} %{a}\
 		   %{g} %{O} %{W*} %{w} %{pedantic} %{ansi} %{traditional}\
 		   %{v:-version} %{gg:-symout %g.sym} %{pg:-p} %{p}\
 		   %{pg:%{fomit-frame-pointer:%e-pg and -fomit-frame-pointer are incompatible}}\
-		   %{S:%{o*}%{!o*:-o %b.s}}%{!S:-o %{|!pipe:%g.s}} |\n\
-              %{!S:ax386 %{R} %{j} %{J} %{h} %{d2} %a %{gg:-G %g.sym}\
-		      %{c:%{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o}\
-                      %{!pipe:%g.s}\n }}}"
-#else /* M_XENIX */
-#ifdef __GNUC__
-  "cpp %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{i*} %{trigraphs} -undef \
-        -D__GNUC__ %{ansi:-trigraphs -$ -D__STRICT_ANSI__} %{!ansi:%p} %P\
-        %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic}\
-	%{Wcomment*} %{Wtrigraphs} %{Wall} %C\
-        %i %{!M*:%{!E:%{!pipe:%g.cpp}}}%{E:%{o*}}%{M*:%{o*}} |\n\
-    %{!M*:%{!E:cc1 %{!pipe:%g.cpp} %1 \
-		   %{!Q:-quiet} -dumpbase %i %{Y*} %{d*} %{m*} %{f*} %{a}\
-		   %{g} %{O} %{W*} %{w} %{pedantic} %{ansi} %{traditional}\
-		   %{v:-version} %{gg:-symout %g.sym} %{pg:-p} %{p}\
-		   %{pg:%{fomit-frame-pointer:%e-pg and -fomit-frame-pointer are incompatible}}\
-		   %{S:%{o*}%{!o*:-o %b.s}}%{!S:-o %{|!pipe:%g.s}} |\n\
-              %{!S:gas %{R} %{j} %{J} %{h} %{d2} %a %{g}\
-		      %{c:%{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o}\
-                      %{!pipe:%g.s}\n }}}"
-#else /* __GNUC__ */
-   c_string
-#endif /* __GNUC__ */
-#endif /* not M_XENIX */
-  },
-#ifndef M_XENIX
-  {".cc",
-   "cpp -+ %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{i*} \
-        -undef -D__GNUC__ -D__GNUG__ %p %P\
-        %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic}\
-	%{Wcomment*} %{Wtrigraphs} %{Wall} %C\
-        %i %{!M*:%{!E:%{!pipe:%g.cpp}}}%{E:%{o*}}%{M*:%{o*}} |\n\
-    %{!M*:%{!E:cc1plus %{!pipe:%g.cpp} %1\
+		   %{S:%W{o*}%{!o*:-o %b.s}}%{!S:-o %{|!pipe:%g.s}} |\n\
+              %{!S:as %{R} %{j} %{J} %{h} %{d2} %a %{gg:-G %g.sym}\
+		      %{c:%W{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o}\
+                      %{!pipe:%g.s}\n }}}"},
+  {".cc", /* GNUDOS: add -D__cplusplus */
+   "cpp_v139 -+ %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{i*} \
+        -undef -D__GNUC__ -DGNUDOS -D__GNUG__ -D__cplusplus %p %P\
+        %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic} %{P}\
+	%{Wcomment*} %{Wtrigraphs} %{Wall} %{w} %C\
+        %i %{!M*:%{!E:%{!pipe:%g.cpp}}}%{E:%W{o*}}%{M*:%W{o*}} |\n\
+    %{!M*:%{!E:cc1plus_v139 %{!pipe:%g.cpp} %1\
 		   %{!Q:-quiet} -dumpbase %i %{Y*} %{d*} %{m*} %{f*} %{a}\
 		   %{g} %{O} %{W*} %{w} %{pedantic} %{traditional}\
 		   %{v:-version} %{gg:-symout %g.sym} %{pg:-p} %{p}\
 		   %{pg:%{fomit-frame-pointer:%e-pg and -fomit-frame-pointer are incompatible}}\
-		   %{S:%{o*}%{!o*:-o %b.s}}%{!S:-o %{|!pipe:%g.s}} |\n\
-              %{!S:ax386 %{R} %{j} %{J} %{h} %{d2} %a %{gg:-G %g.sym}\
-		      %{c:%{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o}\
+		   %{S:%W{o*}%{!o*:-o %b.s}}%{!S:-o %{|!pipe:%g.s}} |\n\
+              %{!S:as %{R} %{j} %{J} %{h} %{d2} %a %{gg:-G %g.sym}\
+		      %{c:%W{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o}\
                       %{!pipe:%g.s}\n }}}"},
-#endif /* M_XENIX */
   {".i",
-#ifndef M_XENIX
-   "cc1 %i %1 %{!Q:-quiet} %{Y*} %{d*} %{m*} %{f*} %{a}\
+   "cc1_v139 %i %1 %{!Q:-quiet} %{Y*} %{d*} %{m*} %{f*} %{a}\
 	%{g} %{O} %{W*} %{w} %{pedantic} %{ansi} %{traditional}\
 	%{v:-version} %{gg:-symout %g.sym} %{pg:-p} %{p}\
-	%{S:%{o*}%{!o*:-o %b.s}}%{!S:-o %{|!pipe:%g.s}} |\n\
-    %{!S:ax386 %{R} %{j} %{J} %{h} %{d2} %a %{gg:-G %g.sym}\
-            %{c:%{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o} %{!pipe:%g.s}\n }"},
-#else /* M_XENIX */
-   "cc1 %i %1 %{!Q:-quiet} %{Y*} %{d*} %{m*} %{f*} %{a}\
-	%{g} %{O} %{W*} %{w} %{pedantic} %{ansi} %{traditional}\
-	%{v:-version} %{gg:-symout %g.sym} %{pg:-p} %{p}\
-	%{S:%{o*}%{!o*:-o %b.s}}%{!S:-o %{|!pipe:%g.s}} |\n\
-    %{!S:gas %{R} %{j} %{J} %{h} %{d2} %a %{g}\
-            %{c:%{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o} %{!pipe:%g.s}\n }"},
-#endif /* not M_XENIX */
+	%{S:%W{o*}%{!o*:-o %b.s}}%{!S:-o %{|!pipe:%g.s}} |\n\
+    %{!S:as %{R} %{j} %{J} %{h} %{d2} %a %{gg:-G %g.sym}\
+            %{c:%W{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o} %{!pipe:%g.s}\n }"},
   {".s",
-#ifndef M_XENIX
-   "%{!S:ax386 %{R} %{j} %{J} %{h} %{d2} %a \
-            %{c:%{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o} %i\n }"},
-#else /* M_XENIX */
-   "%{!S:gas %{R} %{j} %{J} %{h} %{d2} %a %{g}\
-            %{c:%{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o} %i\n }"},
-#endif /* not M_XENIX */
+   "%{!S:as %{R} %{j} %{J} %{h} %{d2} %a \
+            %{c:%W{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o} %i\n }"},
   {".S",
-#ifndef M_XENIX
-   "cpp %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{trigraphs} \
-        -undef -D__GNUC__ -$ %p %P\
-        %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic}\
-	%{Wcomment*} %{Wtrigraphs} %{Wall} %C\
-        %i %{!M*:%{!E:%{!pipe:%g.s}}}%{E:%{o*}}%{M*:%{o*}} |\n\
-    %{!M*:%{!E:%{!S:ax386 %{R} %{j} %{J} %{h} %{d2} %a \
-                    %{c:%{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o}\
+   "cpp_v139 %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{trigraphs} \
+        -undef -D__GNUC__ -DGNUDOS -$ %p %P\
+        %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic} %{P}\
+	%{Wcomment*} %{Wtrigraphs} %{Wall} %{w} %C\
+        %i %{!M*:%{!E:%{!pipe:%g.s}}}%{E:%W{o*}}%{M*:%W{o*}} |\n\
+    %{!M*:%{!E:%{!S:as %{R} %{j} %{J} %{h} %{d2} %a \
+                    %{c:%W{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o}\
 		    %{!pipe:%g.s}\n }}}"},
-#else /* M_XENIX */
-   "cpp %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{trigraphs} \
-        -undef -D__GNUC__ -$ %p %P\
-        %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic}\
-	%{Wcomment*} %{Wtrigraphs} %{Wall} %C\
-        %i %{!M*:%{!E:%{!pipe:%g.s}}}%{E:%{o*}}%{M*:%{o*}} |\n\
-    %{!M*:%{!E:%{!S:gas %{R} %{j} %{J} %{h} %{d2} %a %{g}\
-                    %{c:%{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o}\
-		    %{!pipe:%g.s}\n }}}"},
-#endif /* not M_XENIX */
   /* Mark end of table */
   {0, 0}
 };
 
 /* Here is the spec for running the linker, after compiling all files.  */
-#ifdef M_XENIX
-char *link_spec = "%{!c:%{!M*:%{!E:%{!S:ld %{o*} %l %{g:-g} \
- %{A} %{F} %{r} %{s} %{u*} \
- %{!nostdlib:%S} %{!o:-o a.out} %o %{!nostdlib:gnulib%s %L }\n }}}}";
-#else /* not M_XENIX */
 char *link_spec = "%{!c:%{!M*:%{!E:%{!S:ld %{o*} %l\
  %{A} %{d} %{e*} %{N} %{n} %{r} %{s} %{S} %{T*} %{t} %{u*} %{X} %{x} %{z}\
  %{y*} %{!A:%{!nostdlib:%S}} \
- %{L*} %o %{!nostdlib:gnulib%s %{g:-lg} %L gnulib%s}\n }}}}";
-#endif /* M_XENIX */
+ %{L*} %o %{!nostdlib:%L %{!A:%E}}\n }}}}";
+ /* GNUDOS: gnulib is in libc.a (above), no libg.a */
+/* %{L*} %o %{!nostdlib:gnulib%s %{g:-lg} %L gnulib%s %{!A:%E}}\n }}}}"; */
 
 /* Accumulate a command (program name and args), and run it.  */
 
@@ -513,30 +369,15 @@ char *machine_suffix = 0;
 #endif /* !defined STANDARD_EXEC_PREFIX */
 
 char *standard_exec_prefix = STANDARD_EXEC_PREFIX;
-#ifndef M_XENIX
 char *standard_exec_prefix_1 = "/usr/lib/gcc-";
-#else /* M_XENIX */
-char *standard_exec_prefix_1 = "/usr/local/bin/";
-#endif /* not M_XENIX */
 
-#ifndef M_XENIX
 #ifndef STANDARD_STARTFILE_PREFIX
 #define STANDARD_STARTFILE_PREFIX "/usr/local/lib/"
 #endif /* !defined STANDARD_STARTFILE_PREFIX */
-#else /* M_XENIX */
-#ifndef STANDARD_STARTFILE_PREFIX
-#define STANDARD_STARTFILE_PREFIX "/lib/386/gcc-"
-#endif /* !defined STANDARD_STARTFILE_PREFIX */
-#endif /* not M_XENIX */
 
 char *standard_startfile_prefix = STANDARD_STARTFILE_PREFIX;
-#ifndef M_XENIX
 char *standard_startfile_prefix_1 = "/lib/";
 char *standard_startfile_prefix_2 = "/usr/lib/";
-#else /* M_XENIX */
-char *standard_startfile_prefix_1 = "/lib/386/";
-char *standard_startfile_prefix_2 = "/usr/local/lib/";
-#endif /* not M_XENIX */
 
 /* Clear out the vector of arguments (after a command is executed).  */
 
@@ -712,12 +553,44 @@ void
 choose_temp_base ()
 {
   extern char *getenv ();
+#ifndef __TURBOC__
   char *base = getenv ("TMPDIR");
   int len;
+#else
+  char *base = 0;
+  int len;
+  char *bp;
+
+  /* GNUDOS: check GNUTMP and TMP/TEMP environment variables */
+  if (base == (char *)0) base = getenv("GCCTMP");
+  if (base == (char *)0) base = getenv("TMP");
+  if (base == (char *)0) base = getenv("TEMP");
+  if (base == (char *)0) base = getenv("TMPDIR");
+  if (base == (char *)0) base = "./";
+  for (bp=base; *bp; bp++)
+    if (*bp == '\\') *bp = '/';
+  if (bp[-1] != '/')
+  {
+    bp = (char *)malloc(strlen(base)+2);
+    strcpy(bp, base);
+    strcat(bp, "/");
+    base = bp;
+  }
+#endif
 
   if (base == (char *)0)
     {
+#ifdef P_tmpdir
+      if (access (P_tmpdir, R_OK | W_OK) == 0)
+	base = P_tmpdir;
+#endif
+      if (base == (char *)0)
+	{
+	  if (access ("/usr/tmp", R_OK | W_OK) == 0)
+	    base = "/usr/tmp/";
+	  else
 	    base = "/tmp/";
+	}
     }
 
   len = strlen (base);
@@ -727,7 +600,10 @@ choose_temp_base ()
     temp_filename[len++] = '/';
   strcpy (temp_filename + len, "ccXXXXXX");
 
-  mkstemp (temp_filename);
+  mktemp (temp_filename);
+#ifdef __TURBOC__ /* GNUDOS: use ccXX_XXX.??? - turbo uses ccXX.XXX */
+  temp_filename[strlen(temp_filename)-4] = '_';
+#endif
   temp_filename_length = strlen (temp_filename);
 }
 
@@ -741,6 +617,13 @@ find_exec_file (prog)
   int win = 0;
   char *temp;
   int size;
+
+#ifdef __TURBOC__ /* GNUDOS: we need .exe on the end */
+  char *ptmp = malloc(strlen(prog)+5);
+  strcpy(ptmp, prog);
+  strcat(ptmp, ".exe");
+  prog = ptmp;
+#endif
 
   size = strlen (standard_exec_prefix);
   if (user_exec_prefix != 0 && strlen (user_exec_prefix) > size)
@@ -853,6 +736,9 @@ int last_pipe_input;
    NOT_LAST is nonzero if this is not the last subcommand
    (i.e. its output should be piped to the next one.)  */
 
+/* GNUDOS: set up response file, spawn process and wait for it to come
+   back.  No pipe support. */
+
 static int
 pexecute (func, program, argv, not_last)
      char *program;
@@ -863,8 +749,8 @@ pexecute (func, program, argv, not_last)
 int mode;
 //  return _spawnvp(1, program, FIX_ARGV (argv));
 //  return _spawnv (mode, program, FIX_ARGV (argv));
-   mode=spawnvp (P_WAIT, program, argv);
-   return mode;
+mode=spawnvp (P_WAIT, program, argv);
+return mode;
 }
 
 /* Execute the command specified by the arguments on the current line of spec.
@@ -874,7 +760,6 @@ int mode;
    Return 0 if successful, -1 if failed.  */
 
 #define __TURBOC__
-
 int
 execute ()
 {
@@ -1011,8 +896,8 @@ execute ()
     return ret_code;
   }
 }
-#undef __TURBOC__
-
+//#undef __TURBOC__
+//why?! JASON
 /* Find all the switches given to us
    and make a vector describing them.
    The elements of the vector a strings, one per switch given.
@@ -1055,6 +940,26 @@ process_command (argc, argv)
   n_switches = 0;
   n_infiles = 0;
 
+#ifdef __TURBOC__
+  /* GNUDOS: use the GCC variable first */
+  env_exec_prefix = getenv("GCCBIN");
+  if (env_exec_prefix)
+  {
+    char *cp;
+    for (cp=env_exec_prefix; *cp; cp++)
+      if (*cp == '\\') *cp = '/';
+    if (cp[-1] != '/')
+    {
+      cp = (char *)malloc(strlen(env_exec_prefix)+2);
+      strcpy(cp, env_exec_prefix);
+      strcat(cp, "/");
+      env_exec_prefix = cp;
+    }
+  }
+
+  if (env_exec_prefix == 0)
+#endif
+
   env_exec_prefix = getenv ("GCC_EXEC_PREFIX");
 
   /* Scan argv twice.  Here, the first time, just count how many switches
@@ -1064,7 +969,7 @@ process_command (argc, argv)
   for (i = 1; i < argc; i++)
     {
       if (argv[i][0] == '-' && argv[i][1] != 'l')
-	{
+      {
 	  register char *p = &argv[i][1];
 	  register int c = *p;
 
@@ -1121,17 +1026,18 @@ process_command (argc, argv)
 	  if ((SWITCH_TAKES_ARG (c) && p[1] == 0)
 	      || WORD_SWITCH_TAKES_ARG (p))
 	    switches[n_switches].part2 = argv[++i];
-	  else
+	  else if (c == 'o') {
+	    /* On some systems, ld cannot handle -o without space.
+	       So split the -o and its argument.  */
+	    switches[n_switches].part2 = (char *) xmalloc (strlen (p));
+	    strcpy (switches[n_switches].part2, &p[1]);
+	    p[1] = 0;
+	  } else
 	    switches[n_switches].part2 = 0;
 	  switches[n_switches].valid = 0;
 	  n_switches++;
 	}
       else
-#ifdef M_XENIX
-      if (argv[i][0] == '-' && argv[i][1] == 'l')
-	infiles[n_infiles++] = find_lib(&argv[i][2]);
-      else
-#endif /* M_XENIX */
 	infiles[n_infiles++] = argv[i];
     }
 
@@ -1340,6 +1246,7 @@ do_spec_1 (spec, inswitch)
 	      while (*p != 0 && *p != '\n') p++;
 	      buf = (char *) alloca (p - q + 1);
 	      strncpy (buf, q, p - q);
+	      buf[p - q] = 0;
 	      error ("%s", buf);
 	      return -1;
 	    }
@@ -1368,6 +1275,22 @@ do_spec_1 (spec, inswitch)
 	    this_is_library_file = 1;
 	    break;
 
+	  case 'W':
+	    {
+	      int index = argbuf_index;
+	      /* Handle the {...} following the %W.  */
+	      if (*p != '{')
+		abort ();
+	      p = handle_braces (p + 1);
+	      if (p == 0)
+		return -1;
+	      /* If any args were output, mark the last one for deletion
+		 on failure.  */
+	      if (argbuf_index != index)
+		record_temp_file (argbuf[argbuf_index - 1], 0, 1);
+	      break;
+	    }
+
 	  case 'w':
 	    this_is_output_file = 1;
 	    break;
@@ -1381,7 +1304,6 @@ do_spec_1 (spec, inswitch)
 	  case '%':
 	    obstack_1grow (&obstack, '%');
 	    break;
-
 
 /*** The rest just process a certain constant string as a spec.  */
 
@@ -1451,6 +1373,10 @@ do_spec_1 (spec, inswitch)
 
 	  case 'S':
 	    do_spec_1 (STARTFILE_SPEC, 0);
+	    break;
+
+	  case 'E':
+	    do_spec_1 (ENDFILE_SPEC, 0);
 	    break;
 
 	  default:
@@ -1773,23 +1699,6 @@ find_file (name)
     return save_string (temp, strlen (temp));
   return name;
 }
-
-#ifdef M_XENIX
-char *
-find_lib (name)
-     char *name;
-{
-  char *temp, *rp;
-
-  temp = (char *) alloca (strlen(name) + 8);
-  strcpy(temp, "Slib");
-  strcat(temp, name);
-  strcat(temp, ".a");
-  rp = find_file(temp);
-  return (rp == temp) ? name : rp;
-}
-#endif /* M_XENIX */
-
 
 /* On fatal signals, delete all the temporary files.  */
 
@@ -1797,14 +1706,14 @@ void
 fatal_error (signum)
      int signum;
 {
- // signal (signum, SIG_DFL);
+  //signal (signum, SIG_DFL);
   delete_failure_queue ();
   delete_temp_files ();
   /* Get the same signal again, this time not handled,
      so its normal effect occurs.  */
+#ifndef __TURBOC__
 //  kill (getpid (), signum);
-fprintf(stderr,"\n\nfatal error %d\n\n",signum);
-exit(-1);
+#endif
 }
 
 int
@@ -1817,16 +1726,47 @@ main (argc, argv)
   int error_count = 0;
   int linker_was_run = 0;
   char *explicit_link_files;
+  char *env_lib_path;
+
+//#ifdef __TURBOC__
+#if 0
+  /* GNUDOS: use GCCLIB variable, handle response files */
+  char *env_lib_path;
+
+  new_argc_argv(&argc, &argv);
+#endif
 
   programname = argv[0];
 
+//#ifdef __TURBOC__
+  /* GNUDOS: use GCCLIB variable to locate crt0.o */
+  env_lib_path = getenv("GCCLIB");
+  if (env_lib_path)
+  {
+    char *cp;
+    for (cp=env_lib_path; *cp; cp++)
+      if (*cp == '\\') *cp = '/';
+    if (cp[-1] != '/')
+    {
+      standard_startfile_prefix = (char *)malloc(strlen(env_lib_path)+2);
+      strcpy(standard_startfile_prefix, env_lib_path);
+      strcat(standard_startfile_prefix, "/");
+    }
+    standard_startfile_prefix_1 =
+    standard_startfile_prefix_2 = standard_startfile_prefix;
+  }
+//#endif
+
+//#ifndef __TURBOC__
 #if 0
   if (signal (SIGINT, SIG_IGN) != SIG_IGN)
     signal (SIGINT, fatal_error);
-  if (signal (SIGHUP, SIG_IGN) != SIG_IGN)
-    signal (SIGHUP, fatal_error);
+//  if (signal (SIGHUP, SIG_IGN) != SIG_IGN)
+//    signal (SIGHUP, fatal_error);
   if (signal (SIGTERM, SIG_IGN) != SIG_IGN)
     signal (SIGTERM, fatal_error);
+//  if (signal (SIGPIPE, SIG_IGN) != SIG_IGN)
+//    signal (SIGPIPE, fatal_error);
 #endif
 
   argbuf_length = 10;
@@ -2011,8 +1951,15 @@ save_string (s, len)
 pfatal_with_name (name)
      char *name;
 {
+  //extern int errno, sys_nerr;
+  //extern char *sys_errlist[];
   char *s;
 
+#if WORKING_ERRNO
+  if (errno < sys_nerr)
+    s = concat ("%s: ", sys_errlist[errno], "");
+  else
+#endif
     s = "cannot open %s";
   fatal (s, name);
 }
@@ -2020,8 +1967,15 @@ pfatal_with_name (name)
 perror_with_name (name)
      char *name;
 {
+  //extern int errno, sys_nerr;
+  //extern char *sys_errlist[];
   char *s;
 
+#if WORKING_ERRNO
+  if (errno < sys_nerr)
+    s = concat ("%s: ", sys_errlist[errno], "");
+  else
+#endif
     s = "cannot open %s";
   error (s, name);
 }
@@ -2029,8 +1983,16 @@ perror_with_name (name)
 perror_exec (name)
      char *name;
 {
+  //extern int errno, sys_nerr;
+  //extern char *sys_errlist[];
   char *s;
 
+#if WORKING_ERRNO
+  if (errno < sys_nerr)
+    s = concat ("installation problem, cannot exec %s: ",
+		sys_errlist[errno], "");
+  else
+#endif
     s = "installation problem, cannot exec %s";
   error (s, name);
 }
@@ -2060,7 +2022,7 @@ fatal (va_alist)
   vfprintf (stderr, format, ap);
   va_end (ap);
   fprintf (stderr, "\n");
-  delete_temp_files (0);
+  delete_temp_files ();
   exit (1);
 }  
 

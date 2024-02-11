@@ -12,7 +12,7 @@ PLATFORM = ddksrc
 
 # Version 1.00.075	1989
 # https://archive.org/details/msos2-200-sdk
-PLATFORM = c386
+# PLATFORM = c386
 
 # Version 6.00.077	1991
 # https://archive.org/details/windows-nt-3.1-build-196
@@ -24,7 +24,7 @@ PLATFORM = c386
 
 # Version 6.00.081	1991
 # https://archive.org/details/Windows_NT_and_Win32_Dev_Kit_1991
-# PLATFORM = nt-dec
+PLATFORM = nt-dec
 
 # Version 8.00		1993
 # PLATFORM = msvc32s
@@ -37,7 +37,7 @@ PLATFORM = c386
 # PLATFORM = v13
 
 
-INC = /u
+INC = /u /w
 OPT = /O
 #DEBUG = /Zi
 #LDEBUG = -debug:full
@@ -54,6 +54,7 @@ CC =  $(EMU) $(DOSX) $(CL386ROOT)\$(PLATFORM)\cl386
 # CC =  $(CL386ROOT)\$(PLATFORM)\cl386
 
 OS2LINK = $(EMU) $(DOSX) $(CL386ROOT)\ddk12\LINK386.EXE
+WATCOMLINK = $(CL386ROOT)\wlink.exe
 
 LIBS = 	libc.lib \
 	kernel32.lib \
@@ -79,8 +80,8 @@ OBJ = $(PLATOBJ) $(PORTOBJ)
 # must include ONLY ONE strategey..
 # for OS/2 it must have been assembled my MASM 6.11
 
-include ..\-justcompile.mak
-#include ..\-mangleassembly.mak
+#include ..\-justcompile.mak
+include ..\-mangleassembly.mak
 #include ..\-plainassembly.mak
 
 
@@ -96,7 +97,8 @@ doom-$(PLATFORM).exe: $(OBJ)
 	link $(LDEBUG) -out:doom-$(PLATFORM).exe $(OBJ) $(LIBS)
 
 doom2.exe: $(OBJ)
-	$(OS2LINK) @doom.lnk
+#	$(OS2LINK) /STACK:512000 @doom.lnk
+	$(WATCOMLINK) @doom.wlk
 	mcopy -i %QEMUPATH%\dummy.vfd -D o doom2.exe ::
 
 m_fixed.obj:

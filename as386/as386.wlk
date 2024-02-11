@@ -1,0 +1,9 @@
+SYS os2v2
+NAME as386
+FILE app.obj,append.obj,as.obj,atof-generic.obj,atof-ieee.obj,bignum-copy.obj
+FILE error.obj,expr.obj,flonum-const.obj,flonum-copy.obj,flonum-mult.obj,frags.obj
+FILE hash.obj,hex-value.obj,i386.obj,input-file.obj,input-scrub.obj,messages.obj
+FILE obstack.obj,output-file.obj,read.obj,subsegs.obj,symbols.obj,version.obj
+FILE write.obj,xmalloc.obj,xrealloc.obj
+LIBR LIBC.LIB
+LIBR OS2386.LIB

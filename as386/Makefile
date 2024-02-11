@@ -17,7 +17,9 @@ version.obj write.obj xmalloc.obj xrealloc.obj
 DOSX = run286
 # ms-dos emulator
 EMU = msdos286
+
 OS2LINK = $(EMU) $(DOSX) $(CL386ROOT)\ddk12\LINK386.EXE
+WATCOMLINK = $(CL386ROOT)\wlink.exe
 
 INC = /u /w /I.
 OPT = /G3 -DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX
@@ -26,15 +28,20 @@ LDEBUG = #-debug:full
 
 CC =  $(EMU) $(DOSX) $(CL386ROOT)\$(PLATFORM)\cl386
 
-include ..\-justcompile.mak
 
+# must include ONLY ONE strategey..
+# for OS/2 it must have been assembled my MASM 6.11
+
+include ..\-justcompile.mak
+#include ..\-mangleassembly.mak
+#include ..\-plainassembly.mak
 
 
 as386.exe: $(OBJS)
-        $(OS2LINK) @as386.lnk
+        $(WATCOMLINK) @as386.wlk
         mcopy -i %QEMUPATH%\dummy.vfd -D o as386.exe ::
 
 
 clean:
 	del $(OBJS)
-	del ax386.exe
+	del as386.exe

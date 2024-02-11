@@ -1,0 +1,9 @@
+SYS os2v2
+NAME emxomf
+OP ST=256000
+FILE cplus-dem.obj,emxomf-32.obj,stabshll-32.obj,getopt.obj,getopt1.obj,grow.obj
+FILE omflib\omflibam.obj,omflib\omflibap.obj,omflib\omflibcl.obj,omflib\omflibcp.obj
+FILE omflib\omflibcr.obj,omflib\omflibdl.obj,omflib\omflibex.obj,omflib\omflibpb.obj
+FILE omflib\omflibrd.obj,omflib\omflibut.obj,omflib\omflibwr.obj
+LIBR LIBC.LIB
+LIBR OS2386.LIB

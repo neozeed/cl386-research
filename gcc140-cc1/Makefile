@@ -19,6 +19,7 @@ DOSX = run286
 # ms-dos emulator
 EMU = msdos286
 OS2LINK = $(EMU) $(DOSX) $(CL386ROOT)\ddk12\LINK386.EXE
+WATCOMLINK = $(CL386ROOT)\wlink.exe
 
 INC = /u /w /Iconfig /I.
 OPT = /G3 /D__STDC__
@@ -33,7 +34,7 @@ include ..\-justcompile.mak
 default: cc1.exe
 
 cc1.exe: $(OBJS)
-        $(OS2LINK) @cc1.lnk
+        $(WATCOMLINK) @cc1.wlk
         mcopy -i %QEMUPATH%\dummy.vfd -D o cc1.exe ::
 
 .asm.obj:

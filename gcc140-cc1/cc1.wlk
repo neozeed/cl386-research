@@ -1,0 +1,10 @@
+SYS os2v2
+NAME cc1
+FILE alloca.obj,c-conv.obj,c-decl.obj,c-tab.obj,c-typeck.obj,callersv.obj,combine.obj,cse.obj
+FILE dbxout.obj,emit-rtl.obj,errno.obj,explow.obj,expmed.obj,expr.obj,final.obj,flow.obj
+FILE fold-con.obj,glblallc.obj,insn-emt.obj,insn-out.obj,insn-pep.obj,insn-rcg.obj,insn-xrt.obj,intgrate.obj
+FILE jump.obj,localall.obj,loop.obj,obstack.obj,optabs.obj,pr-tree.obj,pragma.obj,recog.obj
+FILE regclass.obj,reload.obj,reload1.obj,rtl.obj,rtlanal.obj,sdbout.obj,stmt.obj,stor-lay.obj
+FILE stupid.obj,symout.obj,toplev.obj,tree.obj,varasm.obj,version.obj
+LIBR LIBC.LIB
+LIBR OS2386.LIB

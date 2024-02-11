@@ -1,0 +1,19 @@
+gcc.c(1420): Warning! W102: Type mismatch
+gcc.c(1962): Warning! W107: Missing return value for function 'main'
+gcc.c(1967): Warning! W102: Type mismatch
+gcc.c(1976): Warning! W102: Type mismatch
+gcc.c(1006): Error! E1071: Type of parameter 3 does not agree with previous definition
+gcc.c(1323): Error! E1151: Parameter count does not agree with previous definition
+gcc.c(1343): Error! E1151: Parameter count does not agree with previous definition
+gcc.c(1413): Error! E1071: Type of parameter 1 does not agree with previous definition
+gcc.c(1853): Error! E1151: Parameter count does not agree with previous definition
+gcc.c(1942): Error! E1151: Parameter count does not agree with previous definition
+gcc.c(1953): Error! E1151: Parameter count does not agree with previous definition
+gcc.c(1969): Error! E1151: Parameter count does not agree with previous definition
+gcc.c(1976): Warning! W113: Pointer type mismatch
+gcc.c(1978): Error! E1151: Parameter count does not agree with previous definition
+gcc.c(2017): Error! E1151: Parameter count does not agree with previous definition
+gcc.c(2026): Error! E1151: Parameter count does not agree with previous definition
+gcc.c(2035): Error! E1151: Parameter count does not agree with previous definition
+gcc.c(2044): Error! E1151: Parameter count does not agree with previous definition
+gcc.c(2088): Error! E1151: Parameter count does not agree with previous definition

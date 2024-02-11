@@ -1,5 +1,5 @@
 SYS os2v2
-NAME trek2w
+NAME trek2
 FILE abandon.obj,attack.obj,autover.obj,capture.obj,cgetc.obj,checkcond.obj
 FILE check_out.obj,compkl.obj,computer.obj,damage.obj,damaged.obj,dcrept.obj
 FILE destruct.obj,dock.obj,dumpgame.obj,dumpme.obj,dumpssradio.obj,events.obj

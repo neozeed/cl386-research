@@ -18,6 +18,7 @@ DOSX = run286
 # ms-dos emulator
 EMU = msdos286
 OS2LINK = $(EMU) $(DOSX) $(CL386ROOT)\ddk12\LINK386.EXE
+WATCOMLINK = $(CL386ROOT)\wlink.exe
 
 INC = /u /w /I.
 OPT = /G3 #-DUSG -DWORKING_DOT_WORD -DM_XENIX -DXENIX
@@ -31,7 +32,8 @@ include ..\-justcompile.mak
 
 
 emxomf.exe: $(OBJS)
-        $(OS2LINK) /STACK:100000 @emxomf.lnk
+	$(WATCOMLINK) @emxomf.wlk
+#        $(OS2LINK) /STACK:100000 @emxomf.lnk
 	mcopy -i %QEMUPATH%\dummy.vfd -D o emxomf.exe ::
 
 clean:

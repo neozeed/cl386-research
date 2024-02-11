@@ -1,0 +1,2 @@
+c:\wat10\h\sys/stat.h(80): Error! E1100: Definition of macro 'S_IRUSR' not identical to previous definition
+c:\wat10\h\sys/stat.h(81): Error! E1100: Definition of macro 'S_IWUSR' not identical to previous definition

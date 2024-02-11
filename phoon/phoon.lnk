@@ -1,6 +1,6 @@
 astro.obj date_p.obj phoon.obj
-phoon2 /NOE /NOI /NOD:OLDNAMES
+phoon /NOE /NOI /NOD:OLDNAMES
 nul.map
-..\..\lib2\libc.lib +
-..\..\lib2\os2386.lib
+libc.lib +
+os2386.lib
 nul.def;

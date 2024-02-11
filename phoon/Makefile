@@ -24,7 +24,7 @@
 
 # Version 6.00.081	1991
 # https://archive.org/details/Windows_NT_and_Win32_Dev_Kit_1991
-#PLATFORM = nt-dec
+PLATFORM = nt-dec
 
 # Version 8.00          1993
 #PLATFORM = msvc32s
@@ -34,7 +34,7 @@
 # PLATFORM = 73g
 
 # Version  13.10.4035	2002
-# PLATFORM = v13
+#PLATFORM = v13
 PLATFORM = 13.10.6030
 
 INC = /u /w
@@ -54,12 +54,12 @@ EMU = msdos286
 CC =  $(CL386ROOT)\$(PLATFORM)\cl386
 
 OS2LINK = $(EMU) $(DOSX) $(CL386ROOT)\ddk12\LINK386.EXE
+WATCOMLINK = $(CL386ROOT)\wlink.exe
 
 
 LIBS = 	libc.lib \
 	kernel32.lib \
 	oldnames.lib
-
 
 
 OBJ = astro.obj date_p.obj phoon.obj
@@ -84,7 +84,8 @@ phoon-$(PLATFORM).exe: $(OBJ)
 	link $(LDEBUG) -out:phoon-$(PLATFORM).exe $(OBJ) $(LIBS)
 
 phoon2.exe: $(OBJ)
-	$(OS2LINK) @phoon.lnk
+#	$(OS2LINK) @phoon.lnk
+	$(WATCOMLINK) @phoon.wlk
 	mcopy -i %QEMUPATH%\dummy.vfd -D o phoon2.exe ::
 
 clean:
