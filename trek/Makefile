@@ -12,7 +12,7 @@
 
 # Version 1.00.075	1989
 # https://archive.org/details/msos2-200-sdk
-# PLATFORM = c386
+PLATFORM = c386
 
 # Version 6.00.077	1991
 # https://archive.org/details/windows-nt-3.1-build-196
@@ -24,7 +24,7 @@
 
 # Version 6.00.081	1991
 # https://archive.org/details/Windows_NT_and_Win32_Dev_Kit_1991
-PLATFORM = nt-dec
+# PLATFORM = nt-dec
 
 # Version 8.00          1993
 # PLATFORM = msvc32s
@@ -77,9 +77,10 @@ OBJS=   abandon.obj attack.obj autover.obj capture.obj check_out.obj checkcond.o
 # must include ONLY ONE strategey.. 
 # for OS/2 it must have been assembled my MASM 6.11
 
-#include ..\-justcompile.mak
-include ..\-mangleassembly.mak
+include ..\-justcompile.mak
+#include ..\-mangleassembly.mak
 #include ..\-plainassembly.mak
+#include ..\-ftol.mak
 
 all: trek-$(PLATFORM).exe
 
