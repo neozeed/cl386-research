@@ -38,103 +38,103 @@ OBJS = _eprintf.obj _builtin_new.obj _builtin_New2.obj _builtin_del.obj\
 
 
 gnulib.lib: $(OBJS)
-	move _*.obj gnulib
+#	move _*.obj gnulib
 	del gnulib.bak
 	del _*.i _*.s
 
 
 _eprintf.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _builtin_new.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _builtin_New2.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _builtin_del.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _umulsi3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _mulsi3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _udivsi3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _divsi3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _umodsi3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _modsi3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _lshrsi3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _lshlsi3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _ashrsi3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _ashlsi3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _divdf3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _muldf3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _negdf2.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _adddf3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _subdf3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _cmpdf2.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _fixunsdfsi.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _fixdfsi.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _floatsidf.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _truncdfsf2.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _extendsfdf2.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _addsf3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _negsf2.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _subsf3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _cmpsf2.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _mulsf3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 _divsf3.obj:
-	$(CC) $(CFLAGS) /DL$* /c gnulib.c /Fognulib\$*.obj
+	$(CC) $(CFLAGS) /DL$* /Fognulib\$*.obj /c gnulib.c
 	$(LIB) gnulib.lib +gnulib\$*.obj;
 
 

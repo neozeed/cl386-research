@@ -47,139 +47,139 @@ gnulib2.lib: $(OBJS)
 _adddi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _subdi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _muldi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _divdi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _moddi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _udivdi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _umoddi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _negdi2.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _anddi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _iordi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _xordi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _lshrdi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _lshldi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _ashldi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _ashrdi3.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _one_cmpldi2.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _bdiv.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _cmpdi2.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _ucmpdi2.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _fixunsdfdi.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _fixdfdi.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _floatdidf.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 _varargs.obj:
 	$(CPP) -I/cl386-research/h -D__GNUC__ -Di386 -DL$* $(CPPFLAGS) gnulib2.c > $*.i
 	cc1 -version -quiet -o $*.s $*.i
-	ax386 -version -o $*.obj $*.s
+	ax386 -version -o gnulib2\$*.obj $*.s
 	$(LIB) gnulib2.lib +gnulib2\$*.obj;
 
 
