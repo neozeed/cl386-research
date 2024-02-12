@@ -263,7 +263,7 @@ struct compiler compilers[] =
 {
   {".c",
    "cpp %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{i*} %{trigraphs} -undef \
-        -D__GNUC__ -DGNUDOS %{ansi:-trigraphs -$ -D__STRICT_ANSI__} %{!ansi:%p} %P\
+        -D__GNUC__ -DGNUDOS -D_cdecl= %{ansi:-trigraphs -$ -D__STRICT_ANSI__} %{!ansi:%p} %P\
         %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic} %{P}\
 	%{Wcomment*} %{Wtrigraphs} %{Wall} %{w} %C\
         %i %{!M*:%{!E:%{!pipe:%g.cpp}}}%{E:%W{o*}}%{M*:%W{o*}} |\n\
@@ -278,7 +278,7 @@ struct compiler compilers[] =
                       %{!pipe:%g.s}\n }}}"},
   {".cc", /* GNUDOS: add -D__cplusplus */
    "cpp -+ %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{i*} \
-        -undef -D__GNUC__ -DGNUDOS -D__GNUG__ -D__cplusplus %p %P\
+        -undef -D__GNUC__ -DGNUDOS -D_cdecl= -D__GNUG__ -D__cplusplus %p %P\
         %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic} %{P}\
 	%{Wcomment*} %{Wtrigraphs} %{Wall} %{w} %C\
         %i %{!M*:%{!E:%{!pipe:%g.cpp}}}%{E:%W{o*}}%{M*:%W{o*}} |\n\
@@ -303,7 +303,7 @@ struct compiler compilers[] =
             %{c:%W{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o} %i\n }"},
   {".S",
    "cpp %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{trigraphs} \
-        -undef -D__GNUC__ -DGNUDOS -$ %p %P\
+        -undef -D__GNUC__ -DGNUDOS -D_cdecl= -$ %p %P\
         %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic} %{P}\
 	%{Wcomment*} %{Wtrigraphs} %{Wall} %{w} %C\
         %i %{!M*:%{!E:%{!pipe:%g.s}}}%{E:%W{o*}}%{M*:%W{o*}} |\n\
