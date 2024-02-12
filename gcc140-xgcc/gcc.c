@@ -262,22 +262,22 @@ struct compiler
 struct compiler compilers[] =
 {
   {".c",
-   "cpp_v139 %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{i*} %{trigraphs} -undef \
+   "cpp %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{i*} %{trigraphs} -undef \
         -D__GNUC__ -DGNUDOS %{ansi:-trigraphs -$ -D__STRICT_ANSI__} %{!ansi:%p} %P\
         %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic} %{P}\
 	%{Wcomment*} %{Wtrigraphs} %{Wall} %{w} %C\
         %i %{!M*:%{!E:%{!pipe:%g.cpp}}}%{E:%W{o*}}%{M*:%W{o*}} |\n\
-    %{!M*:%{!E:cc1_v139 %{!pipe:%g.cpp} %1 \
+    %{!M*:%{!E:cc1 %{!pipe:%g.cpp} %1 \
 		   %{!Q:-quiet} -dumpbase %i %{Y*} %{d*} %{m*} %{f*} %{a}\
 		   %{g} %{O} %{W*} %{w} %{pedantic} %{ansi} %{traditional}\
 		   %{v:-version} %{gg:-symout %g.sym} %{pg:-p} %{p}\
 		   %{pg:%{fomit-frame-pointer:%e-pg and -fomit-frame-pointer are incompatible}}\
 		   %{S:%W{o*}%{!o*:-o %b.s}}%{!S:-o %{|!pipe:%g.s}} |\n\
-              %{!S:as %{R} %{j} %{J} %{h} %{d2} %a %{gg:-G %g.sym}\
+              %{!S:as386 %{R} %{j} %{J} %{h} %{d2} %a %{gg:-G %g.sym}\
 		      %{c:%W{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o}\
                       %{!pipe:%g.s}\n }}}"},
   {".cc", /* GNUDOS: add -D__cplusplus */
-   "cpp_v139 -+ %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{i*} \
+   "cpp -+ %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{i*} \
         -undef -D__GNUC__ -DGNUDOS -D__GNUG__ -D__cplusplus %p %P\
         %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic} %{P}\
 	%{Wcomment*} %{Wtrigraphs} %{Wall} %{w} %C\
@@ -288,26 +288,26 @@ struct compiler compilers[] =
 		   %{v:-version} %{gg:-symout %g.sym} %{pg:-p} %{p}\
 		   %{pg:%{fomit-frame-pointer:%e-pg and -fomit-frame-pointer are incompatible}}\
 		   %{S:%W{o*}%{!o*:-o %b.s}}%{!S:-o %{|!pipe:%g.s}} |\n\
-              %{!S:as %{R} %{j} %{J} %{h} %{d2} %a %{gg:-G %g.sym}\
+              %{!S:as386 %{R} %{j} %{J} %{h} %{d2} %a %{gg:-G %g.sym}\
 		      %{c:%W{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o}\
                       %{!pipe:%g.s}\n }}}"},
   {".i",
-   "cc1_v139 %i %1 %{!Q:-quiet} %{Y*} %{d*} %{m*} %{f*} %{a}\
+   "cc1 %i %1 %{!Q:-quiet} %{Y*} %{d*} %{m*} %{f*} %{a}\
 	%{g} %{O} %{W*} %{w} %{pedantic} %{ansi} %{traditional}\
 	%{v:-version} %{gg:-symout %g.sym} %{pg:-p} %{p}\
 	%{S:%W{o*}%{!o*:-o %b.s}}%{!S:-o %{|!pipe:%g.s}} |\n\
-    %{!S:as %{R} %{j} %{J} %{h} %{d2} %a %{gg:-G %g.sym}\
+    %{!S:as386 %{R} %{j} %{J} %{h} %{d2} %a %{gg:-G %g.sym}\
             %{c:%W{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o} %{!pipe:%g.s}\n }"},
   {".s",
-   "%{!S:as %{R} %{j} %{J} %{h} %{d2} %a \
+   "%{!S:as386 %{R} %{j} %{J} %{h} %{d2} %a \
             %{c:%W{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o} %i\n }"},
   {".S",
-   "cpp_v139 %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{trigraphs} \
+   "cpp %{nostdinc} %{C} %{v} %{D*} %{U*} %{I*} %{M*} %{trigraphs} \
         -undef -D__GNUC__ -DGNUDOS -$ %p %P\
         %c %{O:-D__OPTIMIZE__} %{traditional} %{pedantic} %{P}\
 	%{Wcomment*} %{Wtrigraphs} %{Wall} %{w} %C\
         %i %{!M*:%{!E:%{!pipe:%g.s}}}%{E:%W{o*}}%{M*:%W{o*}} |\n\
-    %{!M*:%{!E:%{!S:as %{R} %{j} %{J} %{h} %{d2} %a \
+    %{!M*:%{!E:%{!S:as386 %{R} %{j} %{J} %{h} %{d2} %a \
                     %{c:%W{o*}%{!o*:-o %w%b.o}}%{!c:-o %d%w%b.o}\
 		    %{!pipe:%g.s}\n }}}"},
   /* Mark end of table */
