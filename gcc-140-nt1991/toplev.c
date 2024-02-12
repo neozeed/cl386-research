@@ -25,7 +25,7 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
 #include <stdio.h>
 #include <signal.h>
-#include "-setjmp.h"	/*hihgly suspect*/
+#include "_setjmp.h"	/*hihgly suspect*/
 #include <setjmp.h>
 #include <sys/types.h>
 #include <sys/stat.h>

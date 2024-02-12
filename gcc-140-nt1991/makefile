@@ -59,9 +59,12 @@ cc1: cc1.exe
 
 cc1.exe: $(CC1DEPS) $(CC1OBJ) $(CC1INSNOBJ) insn-flg.h insn-cnf.h
 #	cvtomf -g symout.obj
-#	$(link) $(conflags) -out:cc1.exe $(CC1OBJ) $(CC1INSNOBJ) alloca.obj $(conlibs) $(LIBS)
-	$(WATCOMLINK) @cc1.wlk
-	mcopy -i %QEMUPATH%\dummy.vfd -D o cc1.exe ::
+	$(link) $(conflags) -out:cc1.exe $(CC1OBJ) $(CC1INSNOBJ) alloca.obj $(conlibs) $(LIBS)
+#	$(WATCOMLINK) @cc1.wlk
+#	mcopy -i %QEMUPATH%\dummy.vfd -D o cc1.exe ::
+
+ntcc1.exe: $(CC1DEPS) $(CC1OBJ) $(CC1INSNOBJ) insn-flg.h insn-cnf.h  ntsetjmp.obj
+	$(link) $(conflags) -out:cc1.exe $(CC1OBJ) $(CC1INSNOBJ) alloca.obj ntsetjmp.obj $(conlibs) $(LIBS)
 
 cccp.exe: $(CCCPOBJ)
 #	cvtomf -g cccp.obj 
