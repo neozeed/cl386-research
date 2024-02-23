@@ -51,6 +51,9 @@ extern char *alloca();
 #include "i386.h"
 #include "i386-opcode.h"
 
+static int npx_wait = FALSE;
+static int npx_insn = FALSE;
+
 long omagic = OMAGIC;
 char FLT_CHARS[] = "fFdDxX";
 char EXP_CHARS[] = "eE";
@@ -502,6 +505,8 @@ void md_assemble (line)
       as_bad ("expecting opcode; got nothing");
       return;
     }
+
+    npx_insn = (*token_start == 'f');
 
     /* Lookup insn in hash; try intel & att naming conventions if appropriate;
        that is:  we only use the opcode suffix 'b' 'w' or 'l' if we need to. */
@@ -1003,6 +1008,13 @@ void md_assemble (line)
     t->base_opcode = INT3_OPCODE;
     i.imm_operands = 0;
   }
+
+  if (npx_wait && !npx_insn) {
+      char *p;
+      p = frag_more (1);
+      p[0] = 0x9b; /* wait */
+  }
+  npx_wait = npx_insn;
 
   /* We are ready to output the insn. */
   {
