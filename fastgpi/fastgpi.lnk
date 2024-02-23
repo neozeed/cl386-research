@@ -1,0 +1,6 @@
+fastgpi.obj a-float.OBJ
+fastgpi /NOE /NOI /NOD:OLDNAMES
+nul.map
+..\..\lib2\libc.lib +
+..\..\lib2\os2386.lib
+fastgpi.def;
